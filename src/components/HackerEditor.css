@@ -60,7 +60,22 @@
 @media (max-width: 800px) {
   .editor-workspace { 
     grid-template-columns: 1fr; 
-    height: 800px;
+    height: auto;
+    min-height: 600px;
+  }
+  
+  .code-pane, .console-pane {
+    min-height: 300px;
+  }
+
+  .hacker-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .hacker-editor {
+    padding: 1rem;
   }
 }
 

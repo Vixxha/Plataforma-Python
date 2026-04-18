@@ -115,3 +115,40 @@
   flex-direction: column;
   align-items: center;
 }
+
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .logo-image {
+    height: 36px;
+  }
+  
+  .user-login-form {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .user-input {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .run-button {
+    width: 100%;
+  }
+
+  .user-display {
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .app-main {
+    padding: 1rem;
+  }
+}

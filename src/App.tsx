@@ -4,6 +4,7 @@ import { useExerciseLoader } from './hooks/useExerciseLoader';
 import { useExerciseRotation } from './hooks/useExerciseRotation';
 import { CountdownTimer } from './components/CountdownTimer';
 import { HackerEditor } from './components/HackerEditor';
+import { Footer } from './components/Footer';
 import './App.css';
 
 function App() {
@@ -88,6 +89,7 @@ function App() {
             </div>
           )}
         </main>
+        <Footer />
       </div>
     </>
   );
