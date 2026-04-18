@@ -1,0 +1,185 @@
+.hacker-editor {
+  background: var(--bg-glass);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--border-glow);
+  padding: 2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+.hacker-editor::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: var(--accent-primary);
+  box-shadow: var(--border-glow);
+}
+
+.hacker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.hacker-header h2 {
+  color: var(--accent-primary);
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.exercise-id {
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.25rem 0.75rem;
+  color: var(--accent-primary);
+  font-size: 0.8rem;
+  border: 1px solid var(--border-color);
+}
+
+.exercise-description {
+  font-size: 1rem;
+  color: #fff;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.editor-workspace {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  height: 450px;
+  min-height: 350px;
+}
+
+@media (max-width: 800px) {
+  .editor-workspace { 
+    grid-template-columns: 1fr; 
+    height: 800px;
+  }
+}
+
+.code-pane, .console-pane {
+  background: #000;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.pane-header {
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  text-transform: uppercase;
+}
+
+.code-textarea {
+  flex: 1;
+  background: transparent;
+  color: #e2e8f0;
+  border: none;
+  padding: 1rem;
+  resize: none;
+  outline: none;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.run-button {
+  background: rgba(16, 185, 129, 0.1);
+  border: none;
+  border-top: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.run-button:hover:not(:disabled) {
+  background: var(--accent-primary);
+  color: #000;
+}
+
+.run-button.success-btn {
+  background: var(--accent-primary);
+  color: #000;
+}
+
+.console-output {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  min-height: 0;
+}
+
+.output-line {
+  word-break: break-all;
+}
+
+.log-info { color: #94a3b8; }
+.log-error { color: var(--text-error); }
+.log-success { color: var(--accent-primary); font-weight: bold; }
+
+.blinking-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background-color: var(--accent-primary);
+  animation: blink 1s step-end infinite;
+  margin-top: 5px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.solution-section {
+  margin-top: 1.5rem;
+  border-top: 1px dashed var(--text-error);
+  padding-top: 1rem;
+}
+
+.glitch-btn {
+  background: transparent;
+  border: 1px solid var(--text-error);
+  color: var(--text-error);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.glitch-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.solution-content {
+  margin-top: 1rem;
+  background: #000;
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  color: #fff;
+}
