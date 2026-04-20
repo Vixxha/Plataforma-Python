@@ -38,6 +38,35 @@
   line-height: 1.2;
 }
 
+.difficulty-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: fit-content;
+}
+
+.difficulty-basico, .difficulty-facil, .difficulty-fácil {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.difficulty-medio, .difficulty-intermedio {
+  background: rgba(245, 158, 11, 0.15);
+  color: #F59E0B;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.difficulty-dificil, .difficulty-difícil, .difficulty-avanzado {
+  background: rgba(239, 68, 68, 0.15);
+  color: #EF4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
 .exercise-id {
   background: rgba(59, 130, 246, 0.15);
   color: var(--accent-primary);

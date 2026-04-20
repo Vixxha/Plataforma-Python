@@ -49,6 +49,7 @@ Solo escribe este formato (Rellena los corchetes con el ejercicio):
 # === METADATA ===
 # title: [Título corto y llamativo]
 # description: [Descripción clara y directa del problema algorítmico o manipulación de datos que hay que resolver]
+# difficulty: [Elige un nivel de dificultad para el problema. Solo escribe una de estas opciones: Básico, Intermedio, Difícil]
 # expected_output: [Un ejemplo de qué debería devolver u output]
 # hint: [Una pista para ayudar al alumno (sin dar la solución directa)]
 

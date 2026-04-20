@@ -4,6 +4,7 @@ export interface Exercise {
   id: string | number;
   title: string;
   description: string;
+  difficulty?: string;
   expected_output: string;
   solution_code: string;
   tests_code: string;
@@ -18,6 +19,7 @@ const parsePythonExercise = (content: string, id: string): Exercise => {
   
   let title = "Sin Título";
   let description = "Sin descripción";
+  let difficulty = "Básico";
   let expected_output = "";
   let solution_code = "";
   let tests_code = "";
@@ -36,6 +38,7 @@ const parsePythonExercise = (content: string, id: string): Exercise => {
           const value = match[2].trim();
           if (key === "title") title = value;
           if (key === "description") description = value;
+          if (key === "difficulty") difficulty = value;
           if (key === "expected_output") expected_output = value;
           if (key === "hint") hint = value;
         }
@@ -47,7 +50,7 @@ const parsePythonExercise = (content: string, id: string): Exercise => {
     }
   }
 
-  return { id, title, description, expected_output, solution_code, tests_code, hint };
+  return { id, title, description, difficulty, expected_output, solution_code, tests_code, hint };
 };
 
 export const useExerciseLoader = () => {

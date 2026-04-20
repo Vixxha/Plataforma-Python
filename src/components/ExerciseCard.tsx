@@ -15,7 +15,12 @@ export const ExerciseCard: React.FC<Props> = ({ exercise }) => {
   return (
     <div className="exercise-card">
       <div className="exercise-header">
-        <h2 className="exercise-title">{exercise.title}</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-start' }}>
+          <h2 className="exercise-title">{exercise.title}</h2>
+          <span className={`difficulty-badge difficulty-${exercise.difficulty?.toLowerCase().replace(/í/g, 'i') || 'basico'}`}>
+            {exercise.difficulty || 'Básico'}
+          </span>
+        </div>
         <span className="exercise-id">#{exercise.id}</span>
       </div>
       
