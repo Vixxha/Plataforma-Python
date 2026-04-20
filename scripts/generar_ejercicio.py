@@ -69,7 +69,7 @@ except NameError:
 import time
 
 # ... (código existente ... el bucle irá aquí)
-url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={API_KEY}"
+url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key={API_KEY}"
 headers = {'Content-Type': 'application/json'}
 data = {
     "contents": [{"parts": [{"text": prompt}]}]
