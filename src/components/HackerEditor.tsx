@@ -113,7 +113,12 @@ export const HackerEditor: React.FC<Props> = ({ exercise, userName, onForceExerc
   return (
     <div className="hacker-editor">
       <div className="hacker-header">
-        <h2 className="glitch" data-text={exercise.title}>{exercise.title}</h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-start' }}>
+          <h2 className="glitch" data-text={exercise.title}>{exercise.title}</h2>
+          <span className={`difficulty-badge difficulty-${exercise.difficulty?.toLowerCase().replace(/í/g, 'i') || 'basico'}`}>
+            LVL: {exercise.difficulty || 'Básico'}
+          </span>
+        </div>
         <span className="exercise-id">id_{exercise.id}</span>
       </div>
 
