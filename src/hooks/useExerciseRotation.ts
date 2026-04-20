@@ -8,91 +8,55 @@ export const useExerciseRotation = (exercises: Exercise[]) => {
   const [currentExercise, setCurrentExercise] = useState<Exercise | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
 
-  const selectRandomExercise = useCallback(() => {
-    if (exercises.length === 0) return null;
-    const randomIndex = Math.floor(Math.random() * exercises.length);
-    const selected = exercises[randomIndex];
-    
-    // Save state to localStorage to persist rotation logic
-    const state = {
-      exerciseId: selected.id,
-      timestamp: Date.now(),
-    };
-    localStorage.setItem('exercise_rotation_state', JSON.stringify(state));
-    setCurrentExercise(selected);
-    return selected;
-  }, [exercises]);
+  // Allow temporary manual override for the current user's session without breaking global sync
+  const [sessionOffset, setSessionOffset] = useState<number>(0);
+  const [forcedExerciseId, setForcedExerciseId] = useState<string | null>(null);
 
   const forceExercise = useCallback((id: string) => {
-    const found = exercises.find((ex) => ex.id === id);
-    if (found) {
-      setCurrentExercise(found);
-      const state = {
-        exerciseId: found.id,
-        timestamp: Date.now(),
-      };
-      localStorage.setItem('exercise_rotation_state', JSON.stringify(state));
-    }
-  }, [exercises]);
+    setForcedExerciseId(id);
+    setSessionOffset(0);
+  }, []);
+
+  const nextRandomExercise = useCallback(() => {
+    // We just increase the offset locally so the user can keep playing if they finish early
+    setSessionOffset(prev => prev + 1);
+    setForcedExerciseId(null);
+  }, []);
 
   useEffect(() => {
     if (exercises.length === 0) return;
 
-    let targetTime = 0;
-    
-    const initializeRotation = () => {
-      const savedStateStr = localStorage.getItem('exercise_rotation_state');
+    const updateRotation = () => {
       const now = Date.now();
       
-      if (savedStateStr) {
-        try {
-          const savedState = JSON.parse(savedStateStr);
-          const elapsed = now - savedState.timestamp;
-          
-          if (elapsed >= ROTATION_INTERVAL) {
-            // Need a new exercise
-            selectRandomExercise();
-            targetTime = Date.now() + ROTATION_INTERVAL;
-          } else {
-            // Restore current exercise
-            const found = exercises.find((ex) => ex.id === savedState.exerciseId);
-            if (found) {
-              setCurrentExercise(found);
-              targetTime = savedState.timestamp + ROTATION_INTERVAL;
-            } else {
-               selectRandomExercise();
-               targetTime = Date.now() + ROTATION_INTERVAL;
-            }
-          }
-        } catch (e) {
-          selectRandomExercise();
-          targetTime = Date.now() + ROTATION_INTERVAL;
+      // Calculate global synchronized window block (everyone in the world gets same ID)
+      const currentWindow = Math.floor(now / ROTATION_INTERVAL);
+      
+      // Select the exercise deterministically based on time window + any session local skips
+      const rawIndex = currentWindow + sessionOffset;
+      const exerciseIndex = rawIndex % exercises.length;
+      
+      if (forcedExerciseId) {
+        const found = exercises.find(ex => ex.id === forcedExerciseId);
+        if (found) {
+          setCurrentExercise(found);
+        } else {
+          setCurrentExercise(exercises[exerciseIndex]);
         }
       } else {
-        selectRandomExercise();
-        targetTime = Date.now() + ROTATION_INTERVAL;
+        setCurrentExercise(exercises[exerciseIndex]);
       }
+
+      // Calculate time remaining in the global window
+      const remaining = ROTATION_INTERVAL - (now % ROTATION_INTERVAL);
+      setTimeRemaining(remaining);
     };
 
-    initializeRotation();
-
-    // Timer to update time remaining every second
-    const intervalId = setInterval(() => {
-      const now = Date.now();
-      const difference = targetTime - now;
-
-      if (difference <= 0) {
-        // Rotate now!
-        selectRandomExercise();
-        targetTime = Date.now() + ROTATION_INTERVAL;
-        setTimeRemaining(ROTATION_INTERVAL);
-      } else {
-        setTimeRemaining(difference);
-      }
-    }, 1000);
+    updateRotation();
+    const intervalId = setInterval(updateRotation, 1000);
 
     return () => clearInterval(intervalId);
-  }, [exercises, selectRandomExercise]);
+  }, [exercises, sessionOffset, forcedExerciseId]);
 
-  return { currentExercise, timeRemaining, forceExercise, nextRandomExercise: selectRandomExercise };
+  return { currentExercise, timeRemaining, forceExercise, nextRandomExercise };
 };
