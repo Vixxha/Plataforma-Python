@@ -113,35 +113,46 @@ export const HackerEditor: React.FC<Props> = ({ exercise, userName, onForceExerc
   return (
     <div className="hacker-editor">
       <div className="hacker-header">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', alignItems: 'flex-start' }}>
-          <h2 className="glitch" data-text={exercise.title}>{exercise.title}</h2>
-          <span className={`difficulty-badge difficulty-${exercise.difficulty?.toLowerCase().replace(/í/g, 'i') || 'basico'}`}>
-            LVL: {exercise.difficulty || 'Básico'}
-          </span>
-        </div>
+        <h2 className="glitch" data-text={exercise.title}>{exercise.title}</h2>
         <span className="exercise-id">id_{exercise.id}</span>
       </div>
 
       <p className="exercise-description">&gt; {exercise.description}</p>
 
-      {hintsEnabled && exercise.hint && (
-        <div style={{ marginBottom: '1.5rem' }}>
-          {!showHintText ? (
-            <button 
-              className="glitch-btn" 
-              onClick={() => setShowHintText(true)}
-              style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', borderColor: 'var(--accent-secondary)', color: 'var(--accent-secondary)' }}
-            >
-              <Lightbulb size={14} /> DECODIFICAR PISTA
-            </button>
-          ) : (
-            <div style={{ padding: '0.75rem', borderLeft: '3px solid var(--accent-secondary)', background: 'rgba(14, 165, 233, 0.1)', color: 'var(--accent-secondary)', fontStyle: 'italic', fontSize: '0.9rem' }}>
-              <Lightbulb size={14} style={{ display: 'inline', marginBottom: '-2px', marginRight: '0.5rem' }} />
-              {exercise.hint}
-            </div>
-          )}
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+        <div 
+          className="glitch-btn" 
+          style={{ 
+            padding: '0.3rem 0.6rem', 
+            fontSize: '0.8rem', 
+            borderColor: (exercise.difficulty || '').toLowerCase().includes('dificil') || (exercise.difficulty || '').toLowerCase().includes('avanz') ? '#EF4444' : (exercise.difficulty || '').toLowerCase().includes('medio') || (exercise.difficulty || '').toLowerCase().includes('inter') ? '#F59E0B' : '#10B981', 
+            color: (exercise.difficulty || '').toLowerCase().includes('dificil') || (exercise.difficulty || '').toLowerCase().includes('avanz') ? '#EF4444' : (exercise.difficulty || '').toLowerCase().includes('medio') || (exercise.difficulty || '').toLowerCase().includes('inter') ? '#F59E0B' : '#10B981',
+            cursor: 'default',
+            pointerEvents: 'none'
+          }}
+        >
+          LVL: {exercise.difficulty || 'BÁSICO'}
         </div>
-      )}
+
+        {hintsEnabled && exercise.hint && (
+          <div>
+            {!showHintText ? (
+              <button 
+                className="glitch-btn" 
+                onClick={() => setShowHintText(true)}
+                style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem', borderColor: 'var(--accent-secondary)', color: 'var(--accent-secondary)' }}
+              >
+                <Lightbulb size={14} /> DECODIFICAR PISTA
+              </button>
+            ) : (
+              <div style={{ padding: '0.45rem 0.75rem', borderLeft: '3px solid var(--accent-secondary)', background: 'rgba(14, 165, 233, 0.1)', color: 'var(--accent-secondary)', fontStyle: 'italic', fontSize: '0.85rem' }}>
+                <Lightbulb size={14} style={{ display: 'inline', marginBottom: '-2px', marginRight: '0.5rem' }} />
+                {exercise.hint}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       <div className="editor-workspace">
         <div className="code-pane">
