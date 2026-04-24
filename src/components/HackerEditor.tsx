@@ -23,6 +23,13 @@ export const HackerEditor: React.FC<Props> = ({ exercise, userName, onForceExerc
   const [showHintText, setShowHintText] = useState(false);
   const { loading, runCode } = usePythonExecutor();
   const consoleRef = useRef<HTMLDivElement>(null);
+  const nextExerciseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (nextExerciseTimerRef.current) clearTimeout(nextExerciseTimerRef.current);
+    };
+  }, []);
 
   useEffect(() => {
     if (exercise) {
@@ -77,7 +84,7 @@ export const HackerEditor: React.FC<Props> = ({ exercise, userName, onForceExerc
       });
 
       if (onNextExercise) {
-        setTimeout(() => {
+        nextExerciseTimerRef.current = setTimeout(() => {
           onNextExercise();
         }, 5000);
       }

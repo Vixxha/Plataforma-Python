@@ -11,12 +11,9 @@ export interface Exercise {
   hint?: string;
 }
 
-/**
- * Parses Python file content extracting metadata, solution, and tests.
- */
 const parsePythonExercise = (content: string, id: string): Exercise => {
   const sections = content.split(/#\s*===\s*(METADATA|SOLUTION|TESTS)\s*===.*(?:\r?\n|$)/);
-  
+
   let title = "Sin Título";
   let description = "Sin descripción";
   let difficulty = "Básico";
@@ -53,6 +50,9 @@ const parsePythonExercise = (content: string, id: string): Exercise => {
   return { id, title, description, difficulty, expected_output, solution_code, tests_code, hint };
 };
 
+// Upper bound: fetch all in parallel and stop at first gap
+const MAX_EXERCISES = 60;
+
 export const useExerciseLoader = () => {
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,32 +64,26 @@ export const useExerciseLoader = () => {
     const fetchExercises = async () => {
       try {
         setLoading(true);
-        const loadedExercises: Exercise[] = [];
-        let index = 1;
-        let hasMore = true;
 
-        while (hasMore) {
-          try {
-            const response = await fetch(`/exercises/${index}.py?t=${Date.now()}`);
-            if (!response.ok) {
-              if (response.status === 404) {
-                hasMore = false;
-              } else {
-                throw new Error(`Error fetching exercise ${index}`);
-              }
-            } else {
-              const dataStr = await response.text();
-              if (dataStr.trim().startsWith('<')) {
-                 hasMore = false;
-                 continue;
-              }
-              const parsed = parsePythonExercise(dataStr, index.toString());
-              loadedExercises.push(parsed);
-              index++;
-            }
-          } catch (err) {
-            console.warn(`Stopped fetching at index ${index} due to error:`, err);
-            hasMore = false;
+        const results = await Promise.allSettled(
+          Array.from({ length: MAX_EXERCISES }, (_, i) =>
+            fetch(`/exercises/${i + 1}.py`).then(async (r) => {
+              if (!r.ok) return null;
+              const text = await r.text();
+              if (text.trim().startsWith('<')) return null;
+              return { index: i + 1, text };
+            })
+          )
+        );
+
+        // Collect contiguous exercises starting from index 1
+        const loadedExercises: Exercise[] = [];
+        for (const result of results) {
+          if (result.status === 'fulfilled' && result.value !== null) {
+            const { index, text } = result.value;
+            loadedExercises.push(parsePythonExercise(text, index.toString()));
+          } else {
+            break;
           }
         }
 
