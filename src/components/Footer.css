@@ -54,6 +54,15 @@
   transform: translateY(-2px);
 }
 
+.resource-link {
+  color: #0ea5e9;
+}
+
+.resource-link:hover {
+  color: #38bdf8;
+  filter: drop-shadow(0 0 5px #38bdf8);
+}
+
 @media (max-width: 768px) {
   .footer-content {
     flex-direction: column;
