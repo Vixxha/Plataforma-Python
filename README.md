@@ -1,73 +1,51 @@
-# React + TypeScript + Vite
+# Plataforma Hacker de Ejercicios en Python
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
+Esta es una plataforma web interactiva con temática de terminal "hacker", diseñada para aprender y practicar programación en Python. Los usuarios pueden resolver decenas de ejercicios (actualmente más de 90 disponibles) directamente desde el navegador, evaluar su código y recibir retroalimentación instantánea.
 
-Currently, two official plugins are available:
+## Características Principales
+- 💻 **Editor Integrado:** Escribe y ejecuta código Python en tiempo real usando Pyodide (Python ejecutándose en WebAssembly), sin necesidad de instalar nada en tu computadora.
+- 🤖 **Asistente de Inteligencia Artificial (Gemini):** ¿Atascado en un problema? Usa el botón de IA integrado para obtener explicaciones paso a paso de tu código, analizar errores lógicos o de sintaxis, y recibir pistas personalizadas.
+- 📂 **Generación Continua de Ejercicios:** Cuenta con un flujo de trabajo (GitHub Actions) que genera y agrega automáticamente nuevos retos de Python periódicamente utilizando la API de Gemini.
+- 💾 **Descargas Integradas:** Tienes la opción de descargar:
+  - Tu propio código (`.py`).
+  - Los registros de la terminal, incluyendo la explicación y análisis de la IA (`.txt`).
+  - El código de la solución oficial del ejercicio.
+- 🔐 **Sistema de Intentos:** Dispones de 3 intentos para resolver un ejercicio. Solo después de fallar 3 veces, el sistema "desencriptará" y te mostrará la solución oficial.
+- 🎨 **Interfaz Ciberpunk:** Animaciones "glitch", efectos de terminal antigua y colores neón que hacen la experiencia de aprendizaje mucho más divertida e inmersiva.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tecnologías Utilizadas
+- **Frontend:** React + TypeScript + Vite
+- **Ejecución de Python:** Pyodide
+- **Inteligencia Artificial:** Google Gemini API (Flash-Lite)
+- **Estilos:** CSS Vanilla
 
-## React Compiler
+## Instalación y Uso Local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Para correr este proyecto en tu propia máquina:
 
-## Expanding the ESLint configuration
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/Vixxha/Plataforma-Python.git
+   cd Plataforma-Python
+   ```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+3. Configura las variables de entorno:
+   - Copia o renombra el archivo `.env.example` a `.env`
+   - Agrega tu clave de API de Google Gemini:
+     ```env
+     VITE_GEMINI_API_KEY=tu_clave_aqui
+     ```
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+4. Inicia el servidor de desarrollo:
+   ```bash
+   npm run dev
+   ```
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+*Este proyecto fue construido y automatizado para facilitar la enseñanza y el aprendizaje práctico de la programación en Python.*
