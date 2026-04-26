@@ -1,22 +1,26 @@
 import { useState, useEffect, useCallback } from 'react';
 
+export interface PyodideInterface {
+  runPythonAsync: (code: string) => Promise<void>;
+  runPython: (code: string) => string;
+}
+
 declare global {
   interface Window {
-    loadPyodide?: (config: { indexURL: string }) => Promise<any>;
+    loadPyodide?: (config: { indexURL: string }) => Promise<PyodideInterface>;
   }
 }
 
 const EXECUTION_TIMEOUT_MS = 10_000;
 
-// Module-level singletons: Pyodide is initialized once per page load
-let pyodideInstance: any = null;
-let pyodideLoadPromise: Promise<any> | null = null;
+let pyodideInstance: PyodideInterface | null = null;
+let pyodideLoadPromise: Promise<PyodideInterface> | null = null;
 
-const loadPyodideOnce = (): Promise<any> => {
+const loadPyodideOnce = (): Promise<PyodideInterface> => {
   if (pyodideInstance) return Promise.resolve(pyodideInstance);
   if (pyodideLoadPromise) return pyodideLoadPromise;
 
-  pyodideLoadPromise = new Promise<any>((resolve, reject) => {
+  pyodideLoadPromise = new Promise<PyodideInterface>((resolve, reject) => {
     const init = async () => {
       try {
         const py = await window.loadPyodide!({
@@ -56,7 +60,7 @@ const loadPyodideOnce = (): Promise<any> => {
 };
 
 export const usePythonExecutor = () => {
-  const [pyodide, setPyodide] = useState<any>(pyodideInstance);
+  const [pyodide, setPyodide] = useState<PyodideInterface | null>(pyodideInstance);
   const [loading, setLoading] = useState(!pyodideInstance);
 
   useEffect(() => {
@@ -97,9 +101,9 @@ sys.stderr = io.StringIO()
 
       const stdout = pyodide.runPython("sys.stdout.getvalue()");
       return { success: true, stdout };
-    } catch (error: any) {
+    } catch (error: unknown) {
       const stderr = pyodide.runPython("sys.stderr.getvalue()");
-      return { success: false, error: error.toString(), stderr };
+      return { success: false, error: String(error), stderr };
     }
   }, [pyodide]);
 

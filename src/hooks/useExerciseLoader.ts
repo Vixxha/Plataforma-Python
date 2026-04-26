@@ -50,7 +50,6 @@ const parsePythonExercise = (content: string, id: string): Exercise => {
   return { id, title, description, difficulty, expected_output, solution_code, tests_code, hint };
 };
 
-// Upper bound: fetch all in parallel and stop at first gap
 const MAX_EXERCISES = 60;
 
 export const useExerciseLoader = () => {
@@ -76,7 +75,6 @@ export const useExerciseLoader = () => {
           )
         );
 
-        // Collect contiguous exercises starting from index 1
         const loadedExercises: Exercise[] = [];
         for (const result of results) {
           if (result.status === 'fulfilled' && result.value !== null) {
@@ -91,9 +89,10 @@ export const useExerciseLoader = () => {
           setExercises(loadedExercises);
           setLoading(false);
         }
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (isMounted) {
-          setError(err.message || 'Error cargando los ejercicios');
+          const errorMessage = err instanceof Error ? err.message : String(err);
+          setError(errorMessage || 'Error cargando los ejercicios');
           setLoading(false);
         }
       }

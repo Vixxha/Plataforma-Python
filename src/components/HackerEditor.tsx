@@ -56,8 +56,6 @@ export const HackerEditor: React.FC<Props> = ({ exercise, userName, onForceExerc
 
   const handleRun = async () => {
     if (!exercise || loading || isSuccess) return;
-
-    // Admin override bypass
     const adminMatch = code.match(/#admin\s+load\s+(\w+)/i);
     if (adminMatch && adminMatch[1]) {
       const targetId = adminMatch[1];
@@ -109,8 +107,9 @@ export const HackerEditor: React.FC<Props> = ({ exercise, userName, onForceExerc
       const explanationLines = explanation.split('\n');
       const mappedLines = explanationLines.map(t => ({ text: t, type: 'info' as const }));
       setOutputLines(prev => [...prev, { text: `[IA] Análisis Completado:`, type: 'success' }, ...mappedLines]);
-    } catch (err: any) {
-      setOutputLines(prev => [...prev, { text: `[ERROR IA] ${err.message}`, type: 'error' }]);
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      setOutputLines(prev => [...prev, { text: `[ERROR IA] ${errorMessage}`, type: 'error' }]);
     } finally {
       setExplainLoading(false);
     }

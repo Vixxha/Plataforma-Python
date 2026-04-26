@@ -3,7 +3,7 @@ import type { Exercise } from './useExerciseLoader';
 
 const ROTATION_INTERVAL = 60 * 60 * 1000;
 const CACHE_KEY = 'time_offset_cache';
-const CACHE_TTL = 60 * 60 * 1000; // re-sync after 1 hour
+const CACHE_TTL = 60 * 60 * 1000;
 
 const getCachedOffset = (): number | null => {
   try {
@@ -19,7 +19,9 @@ const getCachedOffset = (): number | null => {
 const setCachedOffset = (offset: number) => {
   try {
     sessionStorage.setItem(CACHE_KEY, JSON.stringify({ offset, timestamp: Date.now() }));
-  } catch {}
+  } catch (err) {
+    console.warn('Error cache:', err);
+  }
 };
 
 export const useExerciseRotation = (exercises: Exercise[]) => {
@@ -40,7 +42,6 @@ export const useExerciseRotation = (exercises: Exercise[]) => {
   }, []);
 
   useEffect(() => {
-    // Skip network call if we already have a fresh cached value
     if (getCachedOffset() !== null) return;
 
     const fetchGlobalTime = async () => {
