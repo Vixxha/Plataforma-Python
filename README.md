@@ -35,14 +35,7 @@ Para correr este proyecto en tu propia máquina:
    npm install
    ```
 
-3. Configura las variables de entorno:
-   - Copia o renombra el archivo `.env.example` a `.env`
-   - Agrega tu clave de API de Google Gemini:
-     ```env
-     VITE_GEMINI_API_KEY=tu_clave_aqui
-     ```
-
-4. Inicia el servidor de desarrollo:
+3. Inicia el servidor de desarrollo:
    ```bash
    npm run dev
    ```
